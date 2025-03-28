@@ -1,0 +1,11 @@
+.vscode
+.bsp
+cs
+.scala-build
+.metals
+DadosAPI/.bsp
+DadosAPI/.metals
+DadosAPI/.scala-build
+DadosAPI/.vscode
+DadosAPI/target
+DadosAPI/project
