@@ -22,7 +22,15 @@ def main(args: Array[String]): Unit = {
 
     val bindingFuture = Http().newServerAt("localhost", 8080).bind(route)
 
-    println(s"Server now online. Please navigate to http://localhost:8080/produtos\nhttp://localhost:8080/reviews\nPress RETURN to stop...")
+    println(s"Server now online. Please navigate to\nhttp://localhost:8080/produtos\n" +
+      s"http://localhost:8080/reviews\n" +
+      s"http://localhost:8080/clientes\n" +
+      s"http://localhost:8080/itens\n" +
+      s"http://localhost:8080/local\n" +
+      s"http://localhost:8080/pagamentos\n" +
+      s"http://localhost:8080/pedidos\n" +
+      s"http://localhost:8080/vendedores\n" +
+      s"Press RETURN to stop...")
     StdIn.readLine() // let it run until user presses return
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port

@@ -22,6 +22,42 @@ object Routes {
                 val reviews = csvreader.lerReviews ("data/reviews.csv")
                 complete(reviews.asJson.noSpaces)
             }
+        },
+        path("clientes") {
+            get {
+                val clientes = csvreader.lerClientes ("data/clientes.csv")
+                complete(clientes.asJson.noSpaces)
+            }
+        },
+        path("itens") {
+            get{
+                val itens = csvreader.lerItens ("data/itens.csv")
+                complete(itens.asJson.noSpaces)
+            }
+        },
+        path("local") {
+            get{
+                val local = csvreader.lerLocal ("data/locals.csv")
+                complete(local.asJson.noSpaces)
+            }
+        },
+        path ("pagamentos") {
+            get {
+                val pagamentos = csvreader.lerPagamentos ("data/pagamentos.csv")
+                complete(pagamentos.asJson.noSpaces)
+            }
+        },
+        path ("pedidos") {
+            get {
+                val pedidos = csvreader.lerPedidos ("data/pedidos.csv")
+                complete(pedidos.asJson.noSpaces)
+            }
+        },
+        path ("vendedores") {
+            get {
+                var vendedores = csvreader.lerVendedores ("data/vendedores.csv")
+                complete(vendedores.asJson.noSpaces)
+            }
         }
     )
 }
