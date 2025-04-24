@@ -23,8 +23,7 @@ services:
         CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
         CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
         CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
-        AWS_ACCESS_KEY_ID: "****************"
-        AWS_SECRET_ACCESS_KEY: "******************"
+        # AWS Credetials Here
         CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       volumes:
         - ./s3-sink-config:/etc/kafka-connect/s3-sink
