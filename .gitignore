@@ -29,7 +29,8 @@ consumer/oi/
 consumer/local.csv
 
 # Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform.lock.hcl
 .terraform/
-*.tfstate
-*.tfstate.*
-.terraform.lock.hcl

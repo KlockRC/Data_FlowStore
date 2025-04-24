@@ -1,25 +1,13 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "aws_s3_bucket" "raw" {
-  bucket = "dataflowstore17042025"
+  bucket = "rawlayer24042025"
   force_destroy = "true"
 
   tags = {
-    Name        = "Datalake"
+    Name        = "Raw Layer"
     Environment = "Test"
   }
 }
+
 resource "aws_s3_bucket_ownership_controls" "raw" {
   bucket = aws_s3_bucket.raw.id
   rule {
