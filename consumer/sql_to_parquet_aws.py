@@ -27,7 +27,7 @@ def main():
             tempfile = io.BytesIO()
             df.to_parquet(tempfile, index=True)
             tempfile.seek(0)
-            s3.Bucket(s3bucket).put_object(Key=tempfile"raw/{name}.parquet", Body=f)
+            s3.Bucket(s3bucket).put_object(Key=f"raw/{name}.parquet", Body=tempfile)
             time2 = time.time()
             print("done %.3f" %(time2 - time1))
         except StopIteration:
