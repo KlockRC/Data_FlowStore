@@ -36,7 +36,7 @@ object BronzeLayer {
       .option("subscribe", "Topico-Pedido")
       .option("maxOffsetsPerTrigger", "5")
       .load()
-      .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+      .selectExpr("CAST(value AS STRING)")
 
 
     val df_produto_bronze = spark.readStream
@@ -53,6 +53,15 @@ object BronzeLayer {
       .options(Map(
         "kafka.bootstrap.servers"->"localhost:9094",
         "subscribe"->"Topico-Review",
+        "maxOffsetsPerTrigger"->"5"
+      ))
+      .load()
+      .selectExpr("Cast(value AS STRING)")
+    val df_vendedor_bronze = spark.readStream
+      .format("kafka")
+      .options(Map(
+        "kafka.boot.servers"->"localhost:9094",
+        "subscribe"->"Toptico-Vendedor",
         "maxOffsetsPerTrigger"->"5"
       ))
       .load()
