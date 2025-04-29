@@ -1,14 +1,14 @@
-package schema
+package com.ruancesar.etl.model
 
 import org.apache.spark.sql.types._
 
-val ItemSchema = StructType(Seq(
-  StructField("order_item_id", IntegerType, nullable = true),
-  StructField("price", DoubleType, nullable = true),
+val ItemSchema: StructType = StructType(Seq(
+  StructField("order_item_id", StringType, nullable = true),
+  StructField("price", StringType, nullable = true),
   StructField("product_id", StringType, nullable = true),
   StructField("order_id", StringType, nullable = true),
-  StructField("freight_value", DoubleType, nullable = true),
+  StructField("freight_value", StringType, nullable = true),
   StructField("seller_id", StringType, nullable = true),
   StructField("shipping_limit_date", DateType, nullable = true)
-  
+
 ))
