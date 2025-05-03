@@ -7,5 +7,5 @@ val ClienteSchema: StructType = StructType(Seq(
   StructField("customer_state", StringType, nullable = true),
   StructField("customer_id", StringType, nullable = true),
   StructField("customer_zip_code_prefix", StringType, nullable = true),
-  StructField("customer_state", StringType, nullable = true)
+  StructField("customer_city", StringType, nullable = true)
 ))

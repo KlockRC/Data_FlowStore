@@ -1,39 +1,5 @@
 version: '3.9'
 services:
-  Banco_teste:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: Locals
-      POSTGRES_PASSWORD: Locals
-      POSTGRES_DB: Locals
-      POSTGRES_PORT: 5432
-    ports:
-      - "5432:5432"
-  kafka-connect:
-      image: s3_sink:1.0
-      environment:
-        CONNECT_BOOTSTRAP_SERVERS: broker:9092
-        CONNECT_GROUP_ID: kafka-connect-s3
-        CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-        CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-        CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-        CONNECT_CONFIG_STORAGE_TOPIC: _kafka-connect-configs
-        CONNECT_OFFSET_STORAGE_TOPIC: _kafka-connect-offsets
-        CONNECT_STATUS_STORAGE_TOPIC: _kafka-connect-status
-        CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-        CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-        CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
-        AWS_ACCESS_KEY_ID: "****************"
-        AWS_SECRET_ACCESS_KEY: "****************"
-        CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
-      volumes:
-        - ./s3-sink-config:/etc/kafka-connect/s3-sink
-      ports:
-        - "8083:8083" 
-      networks:
-        - kafka-net
-      depends_on:
-        - broker
   broker:
     image: bitnami/kafka:latest
     container_name: broker
