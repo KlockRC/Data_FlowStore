@@ -1,5 +1,6 @@
-package com.ruancesar.etl.infrastructure
+package com.ruancesar.etl.infrastructure.impl
 
+import com.ruancesar.etl.infrastructure.SparkSessionBuilder
 import org.apache.spark.sql.SparkSession
 
 class SparkSessionBuilderImpl(appName: String, cluster: String) extends SparkSessionBuilder {
