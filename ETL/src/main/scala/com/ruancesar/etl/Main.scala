@@ -1,10 +1,8 @@
 package com.ruancesar.etl
 
 import com.ruancesar.etl.adapter.impl.SparkStreamReadImpl
-import com.ruancesar.etl.infrastructure.SparkSessionBuilderImpl
+import com.ruancesar.etl.infrastructure.impl.{SparkSessionBuilderImpl, SparkQueryBuilderImpl}
 import com.ruancesar.etl.model.*
-import com.ruancesar.etl.service.impl._
-import org.apache.spark.sql.streaming.Trigger
 
 
 object Main {
@@ -15,19 +13,18 @@ object Main {
   val spark4 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
   val spark5 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
   val spark6 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
-
-/*
+  
   val df_pedido_bronze = new SparkStreamReadImpl(spark)
-    .readkafka("localhost:9094", "Topico-Pedido", "5")
+    .readkafka("localhost:9094", "Topico-Pedido", "5", PedidoSchema)
 
   val df_vendedor_bronze = new SparkStreamReadImpl(spark)
-    .readkafka("localhost:9094", "Topico-Vendedor", "5")
+    .readkafka("localhost:9094", "Topico-Vendedor", "5", VendedorSchema)
 
   val df_review_bronze = new SparkStreamReadImpl(spark)
-    .readkafka("localhost:9094", "Topico-Review", "5")
+    .readkafka("localhost:9094", "Topico-Review", "5", ReviewSchema)
 
   val df_produto_bronze = new SparkStreamReadImpl(spark)
-    .readkafka("localhost:9094", "Topico-Produto", "5")
+    .readkafka("localhost:9094", "Topico-Produto", "5", ProdutoSchema)
 
 
   val df_pagamento_bronze = new SparkStreamReadImpl(spark2)
@@ -35,20 +32,20 @@ object Main {
 
   val df_Item_bronze = new SparkStreamReadImpl(spark2)
     .reads3("json", "1", "s3a://rawlayer24042025/topics/Topico-Item/", ItemSchema)
+  
 
-  val df_cliente_bronze = new SparkStreamReadImpl(spark2)
-    .reads3("json", "1", "s3a://rawlayer24042025/topics/Topico-Cliente/", ClienteSchema)
-
- */
   val df_cliente_bronze = new SparkStreamReadImpl(spark2)
   .reads3("json", "1", "s3a://rawlayer24042025/topics/Topico-Cliente/", ClienteSchema)
 
   def main(args: Array[String]): Unit = {
-
-
-
-
-
-
+    new SparkQueryBuilderImpl(df_produto_bronze, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df_pedido_bronze, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df_vendedor_bronze, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df_review_bronze, "3 seconds").queryConsole()sbt run
+    new SparkQueryBuilderImpl(df_pagamento_bronze, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df_Item_bronze, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df_cliente_bronze, "3 seconds").queryConsole()
+    scala.io.StdIn.readLine()
+    
   }
 }

@@ -14,5 +14,4 @@ class PagamentoTransformLayer(df: DataFrame) extends TransformLayer {
       .withColumn("payment_value",col("payment_value").cast(DecimalType(10,2)))
       .withColumn("payment_installments", when(col("payment_installments") === 0, 1).otherwise(col("payment_installments")))
   }
-
 }
