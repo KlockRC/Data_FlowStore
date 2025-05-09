@@ -1,10 +1,10 @@
 package com.ruancesar.etl
 
-import com.ruancesar.etl.adapter.impl.SparkStreamReadImpl
+import com.ruancesar.etl.adapter.impl.{SparkStreamReadImpl,SparkReadImpl}
 import com.ruancesar.etl.infrastructure.impl.{SparkSessionBuilderImpl, SparkQueryBuilderImpl}
 import com.ruancesar.etl.model.*
 import com.ruancesar.etl.service.impl._
-
+import com.ruancesar.etl.service.joinImpl._
 
 object Main {
 
@@ -14,6 +14,7 @@ object Main {
   val spark4 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
   val spark5 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
   val spark6 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
+  val spark7 = new SparkSessionBuilderImpl("teste", "local[*]").confAwsRegionS3("us-east-1")
   
   val df_pedido_bronze = new SparkStreamReadImpl(spark)
     .readkafka("localhost:9094", "Topico-Pedido", "1000", PedidoSchema)
@@ -38,23 +39,33 @@ object Main {
   val df_cliente_bronze = new SparkStreamReadImpl(spark2)
   .reads3("json", "1", "s3a://rawlayer24042025/topics/Topico-Cliente/", ClienteSchema)
 
+  val df_local_bronze = new SparkReadImpl(spark7).reads3("parquet", "s3a://rawlayer24042025/raw/")
+
   def main(args: Array[String]): Unit = {
-    /*
-    new SparkQueryBuilderImpl(df_produto_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_pedido_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_vendedor_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_review_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_pagamento_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_Item_bronze, "3 seconds").queryConsole()
-    new SparkQueryBuilderImpl(df_cliente_bronze, "3 seconds").queryConsole()
 
-     */
+    val df1 = new ClienteTransformLayer(df_cliente_bronze).getValidRecords()
+    val df2 = new ItemTransformLayer(df_Item_bronze).getValidRecords()
+    val df3 = new PagamentoTransformLayer(df_pagamento_bronze).getValidRecords()
+    val df4 = new PedidoTransformLayer(df_pedido_bronze).getValidRecords()
+    val df5 = new ProdutoTransformLayer(df_produto_bronze).getValidRecords()
+    val df6 = new ReviewTransformLayer(df_review_bronze).getValidRecords()
+    val df7 = new LocalTransformLayer(df_local_bronze).getValidRecords() // lido apenas uma vez usar .show() e nao o SparkQueryBuilderImpl NAO É UM STREAM
+    val df8 = new VendedorTransformLayer(df_vendedor_bronze).getValidRecords()
+/*
+    new SparkQueryBuilderImpl(df1, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df2, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df3, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df4, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df5, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df6, "3 seconds").queryConsole()
+    new SparkQueryBuilderImpl(df8, "3 seconds").queryConsole()
 
-    new ClienteTransformLayer(df_cliente_bronze).getValidRecords()
-    new ItemTransformLayer(df_Item_bronze).getValidRecords()
-    new PagamentoTransformLayer(df_pagamento_bronze).getValidRecords()
-    val teste = new PedidoTransformLayer(df_pedido_bronze).getInvalidRecords()
+ */
+    val teste = new JoinPedidoClientePagamento(df3, df4).join()
+
     new SparkQueryBuilderImpl(teste, "3 seconds").queryConsole()
+
+
     scala.io.StdIn.readLine()
 
   }

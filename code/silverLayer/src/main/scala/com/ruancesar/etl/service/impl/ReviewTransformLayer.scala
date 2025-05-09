@@ -9,6 +9,7 @@ class ReviewTransformLayer(df: DataFrame) extends TransformLayer {
     .withColumn("review_score",col("review_score").cast("int"))
     .withColumn("review_creation_date", to_timestamp(col("review_creation_date")))
     .withColumn("review_answer_timestamp",to_timestamp(col("review_answer_timestamp")))
+    .withColumn("review_comment_message", when(col("review_comment_message") === "nan", "").otherwise(col("review_comment_message")))
 
 
   override def getValidRecords(): DataFrame = {

@@ -1,36 +1,66 @@
-# Diretório target (Maven)
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-# IntelliJ IDEA
-.idea/
-.idea/*.xml
-.idea/libraries/
-*.iws
+# General
+.DS_Store
+*.log
+*.swp
+*.bak
+*.tmp
+*~
+.idea
+.vscode
 *.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-# VS Code
-.vscode/
-consumer/.vscode/
+# Build artifacts
+**/target/
+**/bin/
+**/out/
+**/dist/
+**/*.jar
+**/*.class
+**/*.tasty
 
-# Scala
-.bsp/
+# SBT specific
+project/project/
+project/target/
+**/project/target/
+**/project/project/
+**/project/metals.sbt
+**/.bsp/
+**/.bloop/
+**/.metals/
+**/.scala-build/
 
-# Python/VENV
-consumer/oi/
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Arquivos
-consumer/local.csv
+# Docker
+docker-compose.override.yml
 
 # Terraform
-terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.*
-terraform/.terraform.lock.hcl
 .terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
