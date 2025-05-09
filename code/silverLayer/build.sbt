@@ -1,4 +1,4 @@
-name := "ETL-DataFlowStore"
+name := "Silver-Layer-DataFlowStore"
 version := "1.0"
 scalaVersion := "3.3.5"
 libraryDependencies ++= Seq(
