@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from time import time
 
 con = create_engine("postgresql://Locals:Locals@localhost:5432/Locals")
-chunk = pd.read_csv("local.csv", chunksize = 7000)
+chunk = pd.read_csv("olist_geolocation_dataset.csv", chunksize = 7000)
 
 while True:
     try:

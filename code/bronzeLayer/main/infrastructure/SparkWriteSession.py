@@ -4,5 +4,5 @@ from pyspark.sql import DataFrame
 
 class SparkWriteSession(ABC):
     @abstractmethod
-    def write_to_sql(self, df: DataFrame, table: str, mode: str = "append") -> None:
+    def to_sql(self, df: DataFrame, table: str, mode: str = "append") -> None:
         pass

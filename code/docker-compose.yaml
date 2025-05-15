@@ -1,5 +1,13 @@
-version: '3.9'
 services:
+  Banco_teste:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: Locals
+      POSTGRES_PASSWORD: Locals
+      POSTGRES_DB: Locals
+      POSTGRES_PORT: 5432
+    ports:
+      - "5432:5432"
   broker:
     image: bitnami/kafka:latest
     container_name: broker

@@ -1,6 +1,5 @@
 from pyspark.sql import DataFrame
-from bronze.infrastructure.SparkWriteSession import SparkWriteSession
-
+from main.infrastructure.SparkWriteSession import SparkWriteSession
 
 class SparkWriteSessionImpl(SparkWriteSession):
     def __init__(self, jdbc_url: str, properties: dict):

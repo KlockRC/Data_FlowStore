@@ -66,3 +66,6 @@ yarn-error.log*
 *.sw?
 ####################
 code/bronzeLayer/bronze/*
+*.csv
+code/bronzeLayer/bronzeLayer.egg-info/
+code/sla
