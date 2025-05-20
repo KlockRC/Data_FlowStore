@@ -1,4 +1,4 @@
-name := "Silver-Layer-DataFlowStore"
+name := "silver-Layer-DataFlowStore"
 version := "1.0"
 scalaVersion := "3.3.5"
 libraryDependencies ++= Seq(
@@ -7,5 +7,6 @@ libraryDependencies ++= Seq(
   ("org.apache.spark" %% "spark-streaming" % "3.5.5").cross(CrossVersion.for3Use2_13),
   ("org.apache.spark" %% "spark-sql-kafka-0-10" % "3.5.5").cross(CrossVersion.for3Use2_13),
   ("org.apache.hadoop" % "hadoop-aws" % "3.4.1"),
-  ("org.apache.hadoop" % "hadoop-common" % "3.4.1")
+  ("org.apache.hadoop" % "hadoop-common" % "3.4.1"),
+  ("org.postgresql" % "postgresql" % "42.7.5")
 )
