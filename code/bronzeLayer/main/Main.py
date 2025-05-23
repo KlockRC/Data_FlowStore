@@ -5,12 +5,20 @@ from main.infrastructure.impl.SparkWriteSessionImpl import SparkWriteSessionImpl
 
 ####################################### TEST ###########################################
 
-jdbc_url = "jdbc:postgresql://localhost:5432/Locals"
-connection_properties = {
+url_raw = "jdbc:postgresql://localhost:5433/Locals"
+con_raw = {
     "user": "Locals",
     "password": "Locals",
     "driver": "org.postgresql.Driver"
 }
+
+url_bronze = "jdbc:postgresql://localhost:5432/DW"
+con_bronze = {
+    "user": "Bronze",
+    "password": "Bronze",
+    "driver": "org.postgresql.Driver"
+}
+
 
 ####################################### TEST ###########################################
 # build Spark sessions for kafka
@@ -45,19 +53,19 @@ df_clientes = SparkReadImpl(spark6).read_s3("json",
 df_itens = SparkReadImpl(spark7).read_s3("parquet", "s3a://rawlayer24042025/raw/itens/")  # .show(truncate=False)
 
 # Read SQl Tables
-df_locals = SparkReadImpl(spark8).read_sql('"Locals"', jdbc_url, connection_properties)  # .show(truncate=False)
+df_locals = SparkReadImpl(spark8).read_sql('"Locals"', url_raw, con_raw)  # .show(truncate=False)
 print("todos lidos")
 
 def main():
 
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_pedidos,"Pedidos")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_produtos,"Produtos")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_reviews,"Reviews")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_vendedores,"Vendedores")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_pagamentos,"Pagamentos")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_clientes,"Clientes")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_itens,"Itens")
-    SparkWriteSessionImpl(jdbc_url,connection_properties).to_sql(df_locals,"Locals")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_pedidos,"\"Bronze.Pedidos\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_produtos,"\"Bronze.Produtos\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_reviews,"\"Bronze.Reviews\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_vendedores,"\"Bronze.Vendedores\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_pagamentos,"\"Bronze.Pagamentos\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_clientes,"\"Bronze.Clientes\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_itens,"\"Bronze.Itens\"")
+    SparkWriteSessionImpl(url_bronze,con_bronze).to_sql(df_locals,"\"Bronze.Locals\"")
     print("todos gravados")
 
 

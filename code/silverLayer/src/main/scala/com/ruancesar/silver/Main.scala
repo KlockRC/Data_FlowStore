@@ -2,9 +2,7 @@ package com.ruancesar.silver
 
 import com.ruancesar.silver.adapter.impl.SparkReadImpl
 import com.ruancesar.silver.infrastructure.impl.{SparkSessionBuilderImpl, SparkQueryBuilderImpl}
-import com.ruancesar.silver.model.*
 import com.ruancesar.silver.service.impl._
-import com.ruancesar.silver.service.joinImpl._
 import java.util.Properties
 import com.ruancesar.silver.service.joinImpl.DimSellers
 import com.ruancesar.silver.service.joinImpl.DimCustomers
@@ -21,10 +19,10 @@ object Main {
 
   //####################################### TEST ###########################################
 
-  val url = "jdbc:postgresql://localhost:5432/Locals"
+  val url = "jdbc:postgresql://localhost:5432/DW"
   val con = new Properties()
-      con.put("user", "Locals")
-      con.put("password", "Locals")
+      con.put("user", "Bronze")
+      con.put("password", "Bronze")
       con.put("driver", "org.postgresql.Driver")
 
 
@@ -39,21 +37,21 @@ object Main {
   val spark7 = new SparkSessionBuilderImpl("teste", "local[*]").build()
   val spark8 = new SparkSessionBuilderImpl("teste", "local[*]").build()
   
-  val df_pedido_bronze = new SparkReadImpl(spark).readSql(url, "pedidos", con)
+  val df_pedido_bronze = new SparkReadImpl(spark).readSql(url, "\"Bronze.Pedidos\"", con)
 
-  val df_vendedor_bronze = new SparkReadImpl(spark2).readSql(url, "vendedores", con)
+  val df_vendedor_bronze = new SparkReadImpl(spark2).readSql(url, "\"Bronze.Vendedores\"", con)
 
-  val df_review_bronze = new SparkReadImpl(spark3).readSql(url, "reviews", con)
+  val df_review_bronze = new SparkReadImpl(spark3).readSql(url, "\"Bronze.Reviews\"", con)
 
-  val df_produto_bronze = new SparkReadImpl(spark4).readSql(url, "produtos", con)
+  val df_produto_bronze = new SparkReadImpl(spark4).readSql(url, "\"Bronze.Produtos\"", con)
 
-  val df_pagamento_bronze = new SparkReadImpl(spark5).readSql(url, "pagamentos", con)
+  val df_pagamento_bronze = new SparkReadImpl(spark5).readSql(url, "\"Bronze.Pagamentos\"", con)
 
-  val df_Item_bronze = new SparkReadImpl(spark6).readSql(url, "itens", con)
+  val df_Item_bronze = new SparkReadImpl(spark6).readSql(url, "\"Bronze.Itens\"", con)
 
-  val df_cliente_bronze = new SparkReadImpl(spark7).readSql(url, "clientes", con)
+  val df_cliente_bronze = new SparkReadImpl(spark7).readSql(url, "\"Bronze.Clientes\"", con)
 
-  val df_local_bronze = new SparkReadImpl(spark8).readSql(url, "locals", con)
+  val df_local_bronze = new SparkReadImpl(spark8).readSql(url, "\"Bronze.Locals\"", con)
 
   val df_cliente = new ClienteTransformLayer(df_cliente_bronze).getValidRecords()
   val df_item = new ItemTransformLayer(df_Item_bronze).getValidRecords()
@@ -81,13 +79,13 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    new SparkQueryBuilderImpl(factOrders).querySQL(url, "\"factOrders\"", con)
-    new SparkQueryBuilderImpl(dimCustomers).querySQL(url,"\"dimCustomers\"", con)
-    new SparkQueryBuilderImpl(dimDates).querySQL(url,"\"dimDates\"", con)
-    new SparkQueryBuilderImpl(dimOrderReviews).querySQL(url, "\"dimOrderReviews\"", con)
-    new SparkQueryBuilderImpl(dimOrdersPayments).querySQL(url, "\"dimOrdersPayments\"", con)
-    new SparkQueryBuilderImpl(dimProducts).querySQL(url, "\"dimProducts\"", con)
-    new SparkQueryBuilderImpl(dimSellers).querySQL(url, "\"dimSellers\"", con)
+    new SparkQueryBuilderImpl(factOrders).querySQL(url, "\"Silver.factOrders\"", con)
+    new SparkQueryBuilderImpl(dimCustomers).querySQL(url,"\"Silver.dimCustomers\"", con)
+    new SparkQueryBuilderImpl(dimDates).querySQL(url,"\"Silver.dimDates\"", con)
+    new SparkQueryBuilderImpl(dimOrderReviews).querySQL(url, "\"Silver.dimOrderReviews\"", con)
+    new SparkQueryBuilderImpl(dimOrdersPayments).querySQL(url, "\"Silver.dimOrdersPayments\"", con)
+    new SparkQueryBuilderImpl(dimProducts).querySQL(url, "\"Silver.dimProducts\"", con)
+    new SparkQueryBuilderImpl(dimSellers).querySQL(url, "\"Silver.dimSellers\"", con)
 
   }
 }

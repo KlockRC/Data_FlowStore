@@ -4,10 +4,26 @@ from sqlalchemy import create_engine
 import time
 import boto3
 import io
+import time
+
+con0 = create_engine("postgresql://Locals:Locals@localhost:5433/Locals")
 
 
+def LocalsSQL():
+    chunk_Locals = pd.read_csv("olist_geolocation_dataset.csv", chunksize = 7000)
+    while True:
+        try:
+            time1 = time.time()
+            df = next(chunk_Locals)
+            df.to_sql(name="Locals", con=con0, if_exists="append", index=False)
+            time2 = time.time()
+            print("done %.3f" %(time2 - time1))
+        except StopIteration:
+            print("fim Local SQL")
+            break
 
-def main():
+def Itens_Parquet_S3():
+
     s3 = boto3.resource("s3")
 
     list = []
@@ -15,10 +31,9 @@ def main():
     for bucket in s3.buckets.all():
         list.append(bucket.name)
     s3bucket = list[0]
-    con = create_engine("postgresql://Locals:Locals@localhost:5432/Locals")
     ID = 0
 
-    chunks = pd.read_sql_table("Itens", con, index_col = "order_id" , chunksize=1000)
+    chunks = pd.read_csv("olist_order_items_dataset.csv", chunksize=7000)
     for chunk in chunks:
         try:
             time1 =  time.time()
@@ -33,6 +48,8 @@ def main():
             time2 = time.time()
             print("done %.3f" %(time2 - time1))
         except StopIteration:
-            print("Fim")
+            print("fim Itens Parquet")
             break
-main()
+
+LocalsSQL()
+Itens_Parquet_S3()
