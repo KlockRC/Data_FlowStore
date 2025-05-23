@@ -1,6 +1,7 @@
 package com.ruancesar.silver
 
 import com.ruancesar.silver.adapter.impl.SparkReadImpl
+import org.apache.spark.storage.StorageLevel
 import com.ruancesar.silver.infrastructure.impl.{SparkSessionBuilderImpl, SparkQueryBuilderImpl}
 import com.ruancesar.silver.service.impl._
 import java.util.Properties
@@ -53,16 +54,16 @@ object Main {
 
   val df_local_bronze = new SparkReadImpl(spark8).readSql(url, "\"Bronze.Locals\"", con)
 
-  val df_cliente = new ClienteTransformLayer(df_cliente_bronze).getValidRecords()
-  val df_item = new ItemTransformLayer(df_Item_bronze).getValidRecords()
-  val df_pagamento = new PagamentoTransformLayer(df_pagamento_bronze).getValidRecords()
-  val df_pedido = new PedidoTransformLayer(df_pedido_bronze).getValidRecords()
-  val df_produto = new ProdutoTransformLayer(df_produto_bronze).getValidRecords()
-  val df_review = new ReviewTransformLayer(df_review_bronze).getValidRecords()
-  val df_local = new LocalTransformLayer(df_local_bronze).getValidRecords()
-  val df_vendedor = new VendedorTransformLayer(df_vendedor_bronze).getValidRecords()
+  val df_cliente = new ClienteTransformLayer(df_cliente_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_item = new ItemTransformLayer(df_Item_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_pagamento = new PagamentoTransformLayer(df_pagamento_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_pedido = new PedidoTransformLayer(df_pedido_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_produto = new ProdutoTransformLayer(df_produto_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_review = new ReviewTransformLayer(df_review_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_local = new LocalTransformLayer(df_local_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
+  val df_vendedor = new VendedorTransformLayer(df_vendedor_bronze).getValidRecords().persist(StorageLevel.MEMORY_ONLY)
   println("passo1")
-  val df_pagamentoteste = new PagamentoTransformLayer(df_pagamento_bronze).getInvalidRecords().show()
+  //val df_pagamentoteste = new PagamentoTransformLayer(df_pagamento_bronze).getInvalidRecords().show()
 
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -79,13 +80,32 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    new SparkQueryBuilderImpl(factOrders).querySQL(url, "\"Silver.factOrders\"", con)
-    new SparkQueryBuilderImpl(dimCustomers).querySQL(url,"\"Silver.dimCustomers\"", con)
-    new SparkQueryBuilderImpl(dimDates).querySQL(url,"\"Silver.dimDates\"", con)
-    new SparkQueryBuilderImpl(dimOrderReviews).querySQL(url, "\"Silver.dimOrderReviews\"", con)
-    new SparkQueryBuilderImpl(dimOrdersPayments).querySQL(url, "\"Silver.dimOrdersPayments\"", con)
-    new SparkQueryBuilderImpl(dimProducts).querySQL(url, "\"Silver.dimProducts\"", con)
-    new SparkQueryBuilderImpl(dimSellers).querySQL(url, "\"Silver.dimSellers\"", con)
+    new SparkQueryBuilderImpl(df_cliente).querySQL(url, "\"Silver.cliente\"", con)
+    new SparkQueryBuilderImpl(df_item).querySQL(url, "\"Silver.item\"", con)
+    new SparkQueryBuilderImpl(df_pagamento).querySQL(url, "\"Silver.pagamento\"", con)
+    new SparkQueryBuilderImpl(df_pedido).querySQL(url, "\"Silver.pedido\"", con)
+    new SparkQueryBuilderImpl(df_produto).querySQL(url, "\"Silver.produto\"", con)
+    new SparkQueryBuilderImpl(df_review).querySQL(url, "\"Silver.review\"", con)
+    new SparkQueryBuilderImpl(df_local).querySQL(url, "\"Silver.local\"", con)
+    new SparkQueryBuilderImpl(df_vendedor).querySQL(url, "\"Silver.vendedor\"", con)
+
+
+    new SparkQueryBuilderImpl(factOrders).querySQL(url, "\"Gold.factOrders\"", con)
+    new SparkQueryBuilderImpl(dimCustomers).querySQL(url,"\"Gold.dimCustomers\"", con)
+    new SparkQueryBuilderImpl(dimDates).querySQL(url,"\"Gold.dimDates\"", con)
+    new SparkQueryBuilderImpl(dimOrderReviews).querySQL(url, "\"Gold.dimOrderReviews\"", con)
+    new SparkQueryBuilderImpl(dimOrdersPayments).querySQL(url, "\"Gold.dimOrdersPayments\"", con)
+    new SparkQueryBuilderImpl(dimProducts).querySQL(url, "\"Gold.dimProducts\"", con)
+    new SparkQueryBuilderImpl(dimSellers).querySQL(url, "\"Gold.dimSellers\"", con)
 
   }
+
+   df_cliente.unpersist()
+   df_item.unpersist()
+   df_pagamento.unpersist()
+   df_pedido.unpersist()
+   df_produto.unpersist()
+   df_review.unpersist()
+   df_local.unpersist()
+   df_vendedor.unpersist()
 }
